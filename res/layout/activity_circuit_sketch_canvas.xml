@@ -4,11 +4,27 @@
     android:layout_height="match_parent"
     tools:context=".CircuitSketchCanvas" >
 
-    <TextView
+     <EditText
+        android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="23dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+    
+    <LinearLayout
+        android:id="@+id/lin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText1"
+        android:layout_marginLeft="29dp"
+        android:layout_marginTop="76dp"
+        android:orientation="vertical" >
+    </LinearLayout>
 
 </RelativeLayout>
