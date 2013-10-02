@@ -32,7 +32,7 @@ public class SketchView extends View {
 	public Button btnEraseAll;
 	public LayoutParams params;
 	String TAG="sketch";
-	String TAG = "sketch";
+	
 	Boolean mode = false;
 	private int width;
 	Matrix matrix;
@@ -238,28 +238,7 @@ public class SketchView extends View {
 	{
 		
 	}
-	@SuppressLint("DrawAllocation")
-	@Override
-    protected void onDraw(Canvas canvas) {
-		
-		Bitmap toDisk = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
-		    canvas.setBitmap(toDisk);
-		
 	
-		
-		
-        canvas.drawPath(path, brush);
-        
-        
-        
-       try {
-			toDisk.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(new File("/sdcard/circuit.jpg")));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-    }
 	
 	
 	
