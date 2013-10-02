@@ -22,8 +22,10 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
 	Context context;
 	public LayoutParams params;
 	public GestureOverlayView gestureOverlayView;
+	SketchView sv;
 	
-	public CustomCircuitSketch(Context context)
+	
+	public CustomCircuitSketch(Context context, int width, int height)
 	{
 		super(context);
 		this.context=context;
@@ -33,7 +35,7 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
         gestureOverlayView.setGestureStrokeType(gestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
         gestureOverlayView.addOnGesturePerformedListener(this);
         params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        SketchView sv = new SketchView(context);
+        sv = new SketchView(context,height,width);
         
         gestureOverlayView.addView(sv);
         gestureLib = GestureLibraries.fromRawResource(context,R.raw.gestures );
@@ -41,6 +43,20 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
             
           }
 	}
+	
+	//function to call sketchview on erase
+	
+	public void erase()
+	{
+		sv.erase();
+	}
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) {
 		// TODO Auto-generated method stub
