@@ -1,9 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/menu_setting"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
+    
+    <!-- erase button -->
+    <item android:id="@+id/action_erase"
+          android:icon="@drawable/navigation_cancel"
+          android:title="@string/menu_erase"
+          android:showAsAction="ifRoom" />
 
 </menu>

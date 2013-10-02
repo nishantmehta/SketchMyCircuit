@@ -1,9 +1,16 @@
 package com.sketchmycircuit.component;
 
 import java.util.ArrayList;
+/*import com.sketchmycircuit.ui.CircuitSketchCanvas.MyApplication;*/
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -11,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,8 +31,10 @@ public class SketchView extends View {
 	private Path path = new Path();
 	public Button btnEraseAll;
 	public LayoutParams params;
-	String TAG = "sketch";
+	String TAG="sketch";
+	
 	Boolean mode = false;
+	private int width;
 	Matrix matrix;
 	public float lastX;
 	public float lastY;
@@ -40,10 +50,72 @@ public class SketchView extends View {
 	float pointX;
 	float pointY ;
 
-	public SketchView(Context context) {
+	private int height;
+	
+	
+	/*author sarim*/
+	
+	public void erase()
+	{
+		postInvalidate();
+		refreshCanvas(width, height);
+	}
+	
+	
+	
+	
+	
+	
+	public Boolean refreshCanvas(int w, int h)
+	{
+		
+		path.reset();
+        path.moveTo(100, 100);
+        path.lineTo((w-220)/2, 100);
+        
+        //the longer stroke of the battery
+        path.moveTo((w-220)/2, 60);
+        path.lineTo((w-220)/2, 140);
+        
+        //the shorter stroke of the battery
+        path.moveTo((w-180)/2, 80);
+        path.lineTo((w-180)/2, 120);
+        
+        path.moveTo((w-180)/2, 100);
+		path.lineTo(w-100, 100);
+		path.lineTo(w-100, h-400);
+		path.lineTo((w-180)/2, h-400);
+		
+		//the inclined of the switch
+		
+		path.moveTo((w-180)/2, h-440);
+		path.lineTo((w-260)/2, h-400);
+		path.lineTo(100,h-400);
+	    path.lineTo(100, 100);
+		postInvalidate();
+		return true;
+		
+
+	}
+	/*--------------------*/
+	
+	public SketchView(Context context , int w, int h) {
 		super(context);
 		// TODO Auto-generated constructor stub
-		this.context = context;
+	
+		
+		width=w;
+		height=h;
+		
+		
+		
+		
+		//to make the initial circuit
+		refreshCanvas(width, height);
+		
+		
+		
+		this.context=context;
 		this.resetbrush();
 
 		btnEraseAll = new Button(context);
@@ -165,8 +237,10 @@ public class SketchView extends View {
 	public void onDrawCustom(Canvas canvas) {
 
 	}
-
-	@Override
+	
+	
+	
+	
 	protected void onDraw(Canvas canvas) {
 		setBackgroundColor(Color.WHITE);
 

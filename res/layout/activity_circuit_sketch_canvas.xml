@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".CircuitSketchCanvas" >
 
+    
     <LinearLayout
         android:id="@+id/lin"
         android:layout_width="fill_parent"

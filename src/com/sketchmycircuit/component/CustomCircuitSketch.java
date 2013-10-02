@@ -29,27 +29,9 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
 	public LayoutParams params;
 	public GestureOverlayView gestureOverlayView;
 	SketchView sv;
-	public CustomCircuitSketch(Context context, AttributeSet attrs)
-	{
-		super(context, attrs); 
-		
-		Toast.makeText(context, "HI", Toast.LENGTH_SHORT);
-		gestureOverlayView = new GestureOverlayView(context);
-        gestureOverlayView.setEventsInterceptionEnabled(false);
-        
-        gestureOverlayView.setGestureStrokeType(gestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
-        gestureOverlayView.addOnGesturePerformedListener(this);
-        gestureOverlayView.addOnGestureListener(this);
-        params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        sv = new SketchView(context);
-        
-        gestureOverlayView.addView(sv);
-        gestureLib = GestureLibraries.fromRawResource(context,R.raw.gestures );
-        if (!gestureLib.load()) {
-            
-          }
-	}
-	public CustomCircuitSketch(Context context)
+
+	
+	public CustomCircuitSketch(Context context, int width, int height)
 	{
 		super(context);
 		this.context=context;
@@ -58,9 +40,8 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
         
         gestureOverlayView.setGestureStrokeType(gestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
         gestureOverlayView.addOnGesturePerformedListener(this);
-        gestureOverlayView.addOnGestureListener(this);
         params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        sv = new SketchView(context);
+        sv = new SketchView(context,height,width);
         
         gestureOverlayView.addView(sv);
         gestureLib = GestureLibraries.fromRawResource(context,R.raw.gestures );
@@ -68,6 +49,20 @@ public class CustomCircuitSketch extends View implements OnGesturePerformedListe
             
           }
 	}
+	
+	//function to call sketchview on erase
+	
+	public void erase()
+	{
+		sv.erase();
+	}
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) {
 		// TODO Auto-generated method stub
