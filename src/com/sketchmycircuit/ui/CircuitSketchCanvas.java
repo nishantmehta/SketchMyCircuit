@@ -23,9 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.pm.ActivityInfo;
 
 public class CircuitSketchCanvas extends Activity {
 	
@@ -40,8 +38,12 @@ public class CircuitSketchCanvas extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_circuit_sketch_canvas);
+		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		/*Author Sarim*/
 		//finding the height and width and setting it to global members

@@ -9,16 +9,23 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 public class SketchView extends View {
 
 	private Paint brush = new Paint();
 	private Paint eraseBrush = new Paint(brush);
+	public PointF tl = new PointF();
+	public PointF tr = new PointF();
+	public PointF bl = new PointF();
+	public PointF br = new PointF();
+	public Boolean diodeInvert = false;
 	
 	
 	public LayoutParams params;
@@ -86,6 +93,256 @@ public class SketchView extends View {
 		rt.round(ro);
 		invalidate(ro);
 	}
+	
+	public void componentPoints(RectF compRect, Path compPath, String comp)
+	{
+		PointF ctl = new PointF();
+		PointF ctr = new PointF();
+		PointF cbl = new PointF();
+		PointF cbr = new PointF();
+		PointF start = new PointF();
+		PointF end = new PointF();
+		
+		ctl.x = compRect.left;
+		ctl.y = compRect.top;
+		ctr.x = compRect.right;
+		ctr.y = ctl.y;
+		cbl.x = ctl.x;
+		cbl.y = compRect.bottom;
+		cbr.x = ctr.x;
+		cbr.y = cbl.y;
+		
+		if(tl.y <= cbl.y && tl.y >= ctl.y)
+		{
+			start.y = tl.y;
+			end.y = tl.y;
+			start.x = ctl.x;
+			end.x = ctr.x;
+			diodeInvert = false;
+		}
+		if(bl.y <= cbl.y && bl.y >= ctl.y)
+		{
+			start.y = bl.y;
+			end.y = bl.y;
+			start.x = ctl.x;
+			end.x = ctr.x;
+			diodeInvert = true;
+		}
+		if(tr.x <= ctr.x && tr.x >= ctl.x)
+		{
+			start.x = tr.x;
+			end.x = tr.x;
+			start.y = ctl.y;
+			end.y = cbl.y;
+			diodeInvert = false;
+		}
+		if(tl.x <= ctr.x && tl.x >= ctl.x)
+		{
+			start.x = tl.x;
+			end.x = tl.x;
+			start.y = ctl.y;
+			end.y = cbl.y;
+			diodeInvert = true;
+		}	
+		
+		String direction;
+		
+		if(start.x != end.x)
+			direction = "h";
+		else
+			direction = "v";
+		
+		if(comp == "resistor")
+			this.drawComponent(start, end, 1, direction);
+		if(comp == "diode")
+			drawComponent(start, end, 2, direction);
+		if(comp == "capacitor")
+			this.drawComponent(start, end, 3, direction);
+		if(comp == "inductor")
+			drawComponent(start, end, 4, direction);
+		
+	}
+	
+	public void drawComponent(PointF start, PointF end, int comp, String direction)
+	{
+		float x = start.x;
+		float y = start.y;
+		Path path = new Path();
+		if (direction == "h")
+		{
+			switch (comp) {
+			// Resistor
+			case 1:
+				path.moveTo(x, y);
+				path.lineTo(x + 20, y);
+				path.lineTo(x + 40, y - 25);
+				path.lineTo(x + 60, y);
+				path.lineTo(x + 80, y + 25);
+				path.lineTo(x + 100, y);
+				path.lineTo(x + 120, y - 25);
+				path.lineTo(x + 140, y);
+				path.lineTo(x + 160, y + 25);
+				path.lineTo(x + 180, y);
+				path.lineTo(x + 200, y - 25);
+				path.lineTo(x + 220, y);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Diode (equilateral triangle)
+			case 2:
+				path.moveTo(x, y);
+				path.lineTo(x + 40, y);
+				path.lineTo(x + 40, y + 40);
+				path.lineTo(x + 40, y - 40);
+				path.lineTo(x + 109, y);
+				path.moveTo(x + 40, y + 40);
+				path.lineTo(x + 109, y);
+				path.lineTo(x + 109, y + 40);
+				path.lineTo(x + 109, y - 40);
+				path.lineTo(x + 109, y);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Capacitor
+			case 3:
+				path.moveTo(x, y);
+				path.lineTo(x + 60, y);
+				path.lineTo(x + 60, y + 60);
+				path.lineTo(x + 60, y - 60);
+				path.moveTo(x + 80, y);
+				path.lineTo(x + 80, y + 60);
+				path.lineTo(x + 80, y - 60);
+				path.moveTo(x + 80, y);
+				path.lineTo(x + 140, y);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Inductor
+			case 4:
+				path.moveTo(x, y);
+				path.lineTo(x + 30, y);
+				path.lineTo(x + 30, y - 30);
+				getSemicircle(x + 30, y - 30, x + 60, y - 30 , "Right", path);
+				getSemicircle(x + 60, y - 30, x + 90, y - 30, "Right", path);
+				getSemicircle(x + 90, y - 30, x + 120, y - 30, "Right", path);
+				path.lineTo(x + 120, y);
+				path.lineTo(x + 140, y);
+				path.lineTo(end.x, end.y);
+				break;
+			}
+		}
+		
+		if (direction == "v")
+		{
+			switch (comp) {
+			// Resistor
+			case 1:
+				path.moveTo(x, y);
+				path.lineTo(x, y + 20);
+				path.lineTo(x - 25, y + 40);
+				path.lineTo(x, y + 60);
+				path.lineTo(x + 25, y + 80);
+				path.lineTo(x, y + 100);
+				path.lineTo(x - 25, y + 120);
+				path.lineTo(x , y + 140);
+				path.lineTo(x + 25, y + 160);
+				path.lineTo(x , y + 180);
+				path.lineTo(x - 25, y + 200);
+				path.lineTo(x , y + 220);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Diode (equilateral triangle)
+			case 2:
+				path.moveTo(x, y);
+				path.lineTo(x, y + 40);
+				path.lineTo(x + 40, y + 40);
+				path.lineTo(x - 40, y + 40);
+				path.lineTo(x, y + 109);
+				path.moveTo(x + 40, y + 40);
+				path.lineTo(x, y + 109);
+				path.lineTo(x + 40, y + 109);
+				path.lineTo(x - 40, y + 109);
+				path.lineTo(x, y + 109);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Capacitor
+			case 3:
+				path.moveTo(x, y);
+				path.lineTo(x, y + 60);
+				path.lineTo(x + 60, y + 60);
+				path.lineTo(x - 60, y + 60);
+				path.moveTo(x, y + 80);
+				path.lineTo(x + 60, y + 80);
+				path.lineTo(x - 60, y + 80);
+				path.moveTo(x, y + 80);
+				path.lineTo(x, y + 140);
+				path.lineTo(end.x, end.y);
+				break;
+
+			// Inductor
+			case 4:
+				path.moveTo(x, y);
+				path.lineTo(x, y + 30);
+				path.lineTo(x + 30, y + 30);
+				getSemicircle(x + 30, y + 30, x + 30, y + 60, "Right", path);
+				getSemicircle(x + 30, y + 60, x + 30, y + 90, "Right", path);
+				getSemicircle(x + 30, y + 90, x + 30, y + 120, "Right", path);
+				path.lineTo(x, y + 120);
+				path.lineTo(x, y + 140);
+				path.lineTo(end.x, end.y);
+				break;
+			}
+		}
+		
+		if (diodeInvert == true && comp == 2){
+			if (direction == "h")
+			{
+				Matrix myMatrix = new Matrix();
+				myMatrix.postRotate(180, (x + end.x)/2, y);
+				path.transform(myMatrix);
+			}
+			else if (direction == "v")
+			{
+				Matrix myMatrix = new Matrix();
+				myMatrix.postRotate(180, x, (y + end.y)/2);
+				path.transform(myMatrix);
+			}
+			
+		}
+		
+		componentPath.add(path);
+		postInvalidate();
+	}
+	
+	public Path getSemicircle(float xStart, float yStart, float xEnd, float yEnd, String direction, Path path) 
+	{
+        float centerX = xStart + ((xEnd - xStart) / 2);
+        float centerY = yStart + ((yEnd - yStart) / 2);
+ 
+        double xLen = (xEnd - xStart);
+        double yLen = (yEnd - yStart);
+        float radius = (float) (Math.sqrt(xLen * xLen + yLen * yLen) / 2);
+ 
+        RectF oval = new RectF((float) (centerX - radius),
+                (float) (centerY - radius), (float) (centerX + radius),
+                (float) (centerY + radius));
+ 
+        //ovalRectOUT.set(oval);
+ 
+        double radStartAngle = 0;
+        if (direction == "Right") {
+            radStartAngle = Math.atan2(yStart - centerY, xStart - centerX);
+        } else {
+            radStartAngle = Math.atan2(yEnd - centerY, xEnd - centerX);
+        }
+        float startAngle = (float) Math.toDegrees(radStartAngle);
+
+        path.addArc(oval, startAngle, 180);
+        return path;
+ 
+    }
 
 	protected void onDraw(Canvas canvas) {
 		setBackgroundColor(Color.WHITE);
@@ -150,6 +407,15 @@ public class SketchView extends View {
 	public Boolean refreshCanvas(int w, int h) {
 
 		initialCircuit.reset();
+		tl.x = 100;
+		tl.y = 100;
+		tr.x = w-100;
+		tr.y = 100;
+		bl.x = 100;
+		bl.y = h-400;
+		br.x = w-100;
+		br.y = h-400;
+				
 		initialCircuit.moveTo(100, 100);
 		initialCircuit.lineTo((w - 220) / 2, 100);
 
