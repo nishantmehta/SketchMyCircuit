@@ -113,7 +113,7 @@ public class CircuitSketchCanvas extends Activity {
 		
 	}
 	@SuppressWarnings("deprecation")
-	private void openExport()
+	public void openExport()
 	{
 		View v1 = L2.getRootView();
         v1.setDrawingCacheEnabled(true);

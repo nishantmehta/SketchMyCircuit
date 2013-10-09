@@ -101,6 +101,12 @@ public class CustomCircuitSketch extends View implements
 			{
 				component = "inductor";
 			}
+			else if(bestPrediction.name.contains("export"))
+			{
+				export();
+				
+				return;
+			}
 			
 			sv.componentPoints(compRect, compPt, component);
 

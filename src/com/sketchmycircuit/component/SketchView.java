@@ -2,6 +2,8 @@ package com.sketchmycircuit.component;
 
 import java.util.ArrayList;
 
+import com.sketchmycircuit.ui.CircuitSketchCanvas;
+
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -26,6 +28,7 @@ public class SketchView extends View {
 	public PointF bl = new PointF();
 	public PointF br = new PointF();
 	public Boolean diodeInvert = false;
+	CircuitSketchCanvas CSC=new CircuitSketchCanvas();
 	
 	
 	public LayoutParams params;
@@ -42,6 +45,10 @@ public class SketchView extends View {
 	
 	float touchPointX;
 	float touchPointY;
+	
+	
+	
+	
 	
 	//initial circuit
 	private Path initialCircuit = new Path();
@@ -65,7 +72,8 @@ public class SketchView extends View {
 
 	public void export()
 	{
-		
+			
+		CSC.openExport();
 	}
 	/*--------------------*/
 
@@ -86,16 +94,80 @@ public class SketchView extends View {
 	}
 
 	public void setErase(RectF rt, Path r) {
+		
+		if(rt != null){
 
+		if (rt.contains(tl.x, tl.y) || rt.contains(tr.x, tr.y) || rt.contains(bl.x, bl.y) || rt.contains(br.x, br.y))
+		{
+			Toast.makeText(context, "Please erase a different area!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+			
+		PointF ctl = new PointF();
+		PointF ctr = new PointF();
+		PointF cbl = new PointF();
+		PointF cbr = new PointF();
+		PointF start = new PointF();
+		PointF end = new PointF();
+		
+		ctl.x = rt.left;
+		ctl.y = rt.top;
+		ctr.x = rt.right;
+		ctr.y = ctl.y;
+		cbl.x = ctl.x;
+		cbl.y = rt.bottom;
+		cbr.x = ctr.x;
+		cbr.y = cbl.y;
+		
+		if(tl.y <= cbl.y && tl.y >= ctl.y)
+		{
+			start.y = tl.y;
+			end.y = tl.y;
+			start.x = ctl.x;
+			end.x = ctr.x;
+		}
+		if(bl.y <= cbl.y && bl.y >= ctl.y)
+		{
+			start.y = bl.y;
+			end.y = bl.y;
+			start.x = ctl.x;
+			end.x = ctr.x;
+		}
+		if(tr.x <= ctr.x && tr.x >= ctl.x)
+		{
+			start.x = tr.x;
+			end.x = tr.x;
+			start.y = ctl.y;
+			end.y = cbl.y;
+		}
+		if(tl.x <= ctr.x && tl.x >= ctl.x)
+		{
+			start.x = tl.x;
+			end.x = tl.x;
+			start.y = ctl.y;
+			end.y = cbl.y;
+		}	
+		double x = start.x  - end.x;
+		double y = start.y - end.y;
+		double dist = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0));
+		
+		if(dist < 200)
+		{
+			Toast.makeText(context, "Please erase a bigger area!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		erasePath.add(r);
 		eraseRegion.add(rt);
 		Rect ro = new Rect();
 		rt.round(ro);
 		invalidate(ro);
+		}
 	}
 	
 	public void componentPoints(RectF compRect, Path compPath, String comp)
 	{
+		if(compRect != null && comp != null){
 		PointF ctl = new PointF();
 		PointF ctr = new PointF();
 		PointF cbl = new PointF();
@@ -160,7 +232,7 @@ public class SketchView extends View {
 			this.drawComponent(start, end, 3, direction);
 		if(comp == "inductor")
 			drawComponent(start, end, 4, direction);
-		
+		}
 	}
 	
 	public void drawComponent(PointF start, PointF end, int comp, String direction)
