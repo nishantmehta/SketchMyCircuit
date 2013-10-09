@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.app.Application;
+import android.content.pm.ActivityInfo;
 
 public class CircuitSketchCanvas extends Activity {
 	
@@ -24,8 +25,12 @@ public class CircuitSketchCanvas extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_circuit_sketch_canvas);
+		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		/*Author Sarim*/
 		//finding the height and width and setting it to global members

@@ -28,6 +28,8 @@ public class CustomCircuitSketch extends View implements
 	public LayoutParams params;
 	public GestureOverlayView gestureOverlayView;
 	SketchView sv;
+	public RectF compRect;
+	public Path compPt;
 
 	public CustomCircuitSketch(Context context, int width, int height) {
 		super(context);
@@ -56,32 +58,56 @@ public class CustomCircuitSketch extends View implements
 	}
 
 	@Override
-	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) {
+	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) 
+	{
 		// TODO Auto-generated method stub
 
 		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
 
 		Prediction bestPrediction = findBestPrediction(predictions);
-		if (bestPrediction.score > 2) {
-
+		if (bestPrediction.score > 0) 
+		{
+			String component = null;
 			// if the gesture is a delete gesture
-			if (bestPrediction.name.equalsIgnoreCase("delete")) {
+			if (bestPrediction.name.contains("delete")) 
+			{
 				ArrayList<GestureStroke> strokes = gesture.getStrokes();
 				GestureStroke st = strokes.get(0);
 
 				RectF rec = st.boundingBox;
 				Path pt = st.getPath();
+				compRect = rec;
+				compPt = pt;
+				
 				sv.setErase(rec, pt);
 			}
+			else if (bestPrediction.name.contains("resistor")) 
+			{
+				component = "resistor";
+			}
+			else if (bestPrediction.name.contains("capacitor")) 
+			{
+				component = "capacitor";
+			}
+			else if (bestPrediction.name.contains("diode")) 
+			{
+				component = "diode";
+			}
+			else if (bestPrediction.name.contains("inductor")) 
+			{
+				component = "inductor";
+			}
+			
+			sv.componentPoints(compRect, compPt, component);
 
 			Toast.makeText(context,
 					bestPrediction.name + " " + bestPrediction.score,
 					Toast.LENGTH_SHORT).show();
-		} else
-			Toast.makeText(context, "Sorry no match", Toast.LENGTH_SHORT)
+		} 
+		else
+			Toast.makeText(context, bestPrediction.name, Toast.LENGTH_SHORT)
 					.show();
-
-	}
+}
 
 	public Prediction findBestPrediction(ArrayList<Prediction> predictions) {
 		Prediction bestPrediction = predictions.get(0);
