@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.sketchmycircuit.R;
 import com.sketchmycircuit.component.CustomCircuitSketch;
@@ -112,15 +113,14 @@ public class CircuitSketchCanvas extends Activity {
 		CCS.erase();
 		
 	}
-	@SuppressWarnings("deprecation")
+
 	public void openExport()
 	{
 		View v1 = L2.getRootView();
         v1.setDrawingCacheEnabled(true);
         Bitmap bm = v1.getDrawingCache();
-        Bitmap resizedbitmap;
-  
-		BitmapDrawable bitmapDrawable = new BitmapDrawable(bm);
+       
+        /*Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();*/
 		
 		//storing in sdcard
 		

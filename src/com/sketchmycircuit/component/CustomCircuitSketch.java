@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.sketchmycircuit.R;
+import com.sketchmycircuit.ui.CircuitSketchCanvas;
 
 public class CustomCircuitSketch extends View implements
 		OnGesturePerformedListener, OnGestureListener {
@@ -30,6 +32,11 @@ public class CustomCircuitSketch extends View implements
 	SketchView sv;
 	public RectF compRect;
 	public Path compPt;
+	
+	Context mContext;
+	
+	
+	CircuitSketchCanvas CSC;
 
 	public CustomCircuitSketch(Context context, int width, int height) {
 		super(context);
@@ -103,7 +110,21 @@ public class CustomCircuitSketch extends View implements
 			}
 			else if(bestPrediction.name.contains("export"))
 			{
-				export();
+				mContext=getContext();
+				
+				if(mContext instanceof CircuitSketchCanvas)
+				{
+				    CircuitSketchCanvas activity = (CircuitSketchCanvas)mContext;
+				    // Then call the method in the activity.
+				    activity.openExport();
+				    
+				    
+				    
+				}
+				
+				 Toast.makeText(context,
+							bestPrediction.name + " " + bestPrediction.score,
+							Toast.LENGTH_SHORT).show();
 				
 				return;
 			}
