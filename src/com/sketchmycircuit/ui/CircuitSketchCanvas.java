@@ -2,24 +2,40 @@ package com.sketchmycircuit.ui;
 
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import com.sketchmycircuit.R;
 import com.sketchmycircuit.R.layout;
 import com.sketchmycircuit.R.menu;
 import com.sketchmycircuit.component.CustomCircuitSketch;
 import com.sketchmycircuit.component.SketchView;
 
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
+import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 
 public class CircuitSketchCanvas extends Activity {
 	
 	
 	CustomCircuitSketch CCS;
+	LinearLayout L1;
+	LinearLayout L2;
+	ImageView image;
+	int height;
+	int width;
 
 
 	@Override
@@ -34,9 +50,8 @@ public class CircuitSketchCanvas extends Activity {
 		/*((MyApplication)this.getApplication()).setHeigth(displaymetrics.heightPixels);
 		((MyApplication)this.getApplication()).setWidth(displaymetrics.widthPixels);*/
 		
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
-		
+		 height = displaymetrics.heightPixels;
+		 width = displaymetrics.widthPixels;
 		
 		
 		
@@ -50,7 +65,9 @@ public class CircuitSketchCanvas extends Activity {
 		
 		CCS = new CustomCircuitSketch(this,height,width);
 		
-        
+	
+		L1 = (LinearLayout) findViewById(R.id.lin);
+		L2= (LinearLayout)findViewById(R.id.lNew);
         
         LinearLayout ll = (LinearLayout)findViewById(R.id.lin);
         
@@ -79,6 +96,8 @@ public class CircuitSketchCanvas extends Activity {
 	        case R.id.menu_setting:
 	            openSettings();
 	            return true;
+	        case R.id.action_screenshot:
+	        	openExport();
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -94,6 +113,46 @@ public class CircuitSketchCanvas extends Activity {
 		
 		CCS.erase();
 		
+	}
+	@SuppressWarnings("deprecation")
+	private void openExport()
+	{
+		View v1 = L2.getRootView();
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bm = v1.getDrawingCache();
+        Bitmap resizedbitmap;
+  
+		BitmapDrawable bitmapDrawable = new BitmapDrawable(bm);
+		
+		//storing in sdcard
+		
+		String filename = "circuit2.png";
+		File sd = Environment.getExternalStorageDirectory();
+		File dest = new File(sd, filename);
+
+		
+		try {
+		     FileOutputStream out = new FileOutputStream(dest);
+		     bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+		     out.flush();
+		     out.close();
+		} catch (Exception e) {
+		     e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		//Bitmap bmp=BitmapFactory.decodeResource(bm);
+
+		//resizedbitmap = Bitmap.createBitmap(bmp, 0,100,width, height-100);
+		
+       /* image = (ImageView) findViewById(R.id.imageView1);
+        image.setBackgroundDrawable(bitmapDrawable);
+		*/
+		//CCS.export();
 	}
 	
 	

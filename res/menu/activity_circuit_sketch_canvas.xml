@@ -11,5 +11,10 @@
           android:icon="@drawable/navigation_cancel"
           android:title="@string/menu_erase"
           android:showAsAction="ifRoom" />
+    
+     <item android:id="@+id/action_screenshot"
+          android:icon="@drawable/export"
+          android:title="@string/menu_export"
+          android:showAsAction="ifRoom" />
 
 </menu>

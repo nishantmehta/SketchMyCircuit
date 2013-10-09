@@ -55,6 +55,10 @@ public class CustomCircuitSketch extends View implements
 		sv.erase();
 	}
 
+	public void export()
+	{
+		sv.export();
+	}
 	@Override
 	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) {
 		// TODO Auto-generated method stub

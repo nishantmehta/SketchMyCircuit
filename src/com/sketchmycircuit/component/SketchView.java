@@ -56,6 +56,10 @@ public class SketchView extends View {
 		refreshCanvas(width, height);
 	}
 
+	public void export()
+	{
+		
+	}
 	/*--------------------*/
 
 	public SketchView(Context context, int w, int h) {
