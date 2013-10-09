@@ -5,25 +5,21 @@ package com.sketchmycircuit.ui;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import com.sketchmycircuit.R;
-import com.sketchmycircuit.R.layout;
-import com.sketchmycircuit.R.menu;
-import com.sketchmycircuit.component.CustomCircuitSketch;
-import com.sketchmycircuit.component.SketchView;
-
-
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.app.Activity;
-import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.app.Application;
-import android.content.pm.ActivityInfo;
+
+import com.sketchmycircuit.R;
+import com.sketchmycircuit.component.CustomCircuitSketch;
 
 public class CircuitSketchCanvas extends Activity {
 	
