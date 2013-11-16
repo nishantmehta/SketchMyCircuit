@@ -43,6 +43,7 @@ public class SketchView extends View {
 	String TAG = "sketch";
 
 	Boolean mode = false;
+	Boolean erase = false;
 	
 	private int width;
 	private int height;
@@ -177,14 +178,20 @@ public class SketchView extends View {
 		}
 	}
 
-	public void setErase(RectF rt, Path r) {
+	public int setErase(RectF rt, Path r) {
+		
+		if(erase == true)
+		{
+			Toast.makeText(context, "Please draw a component before erasing another part of the circuit!", Toast.LENGTH_SHORT).show();
+			return -2;
+		}
 		
 		if(rt != null){
 
 		if (rt.contains(tl.x, tl.y) || rt.contains(tr.x, tr.y) || rt.contains(bl.x, bl.y) || rt.contains(br.x, br.y))
 		{
 			Toast.makeText(context, "Please erase a different area!", Toast.LENGTH_SHORT).show();
-			return;
+			return -1;
 		}
 			
 		PointF ctl = new PointF();
@@ -255,7 +262,7 @@ public class SketchView extends View {
 		if(dist < 200)
 		{
 			Toast.makeText(context, "Please erase a bigger area!", Toast.LENGTH_SHORT).show();
-			return;
+			return -1;
 		}
 		
 		
@@ -264,7 +271,10 @@ public class SketchView extends View {
 		Rect ro = new Rect();
 		rt.round(ro);
 		invalidate(ro);
+		erase = true;
+		return 1;
 		}
+		return -1;
 	}
 	
 	public void componentPoints(RectF compRect, Path compPath, String comp)
@@ -517,6 +527,7 @@ public class SketchView extends View {
 		
 		
 		postInvalidate();
+		erase = false;
 	}
 	
 	public Path getSemicircle(float xStart, float yStart, float xEnd, float yEnd, String direction, Path path) 
@@ -645,6 +656,7 @@ public class SketchView extends View {
 		wirecount = 0;
 		wireComponentStart = new PointF();
 		wireComponentEnd = new PointF();
+		erase = false;
 		postInvalidate();
 		return true;
 
