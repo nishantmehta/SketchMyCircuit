@@ -20,6 +20,17 @@
             android:label="@string/app_name" 
             android:hardwareAccelerated="false">
             <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.CircuitSketchCanvas.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+         <activity
+            android:name="com.sketchmycircuit.ui.SplashScreen"
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:hardwareAccelerated="false">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

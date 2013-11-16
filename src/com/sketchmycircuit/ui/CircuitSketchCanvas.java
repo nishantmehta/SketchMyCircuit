@@ -31,6 +31,7 @@ public class CircuitSketchCanvas extends Activity {
 	ImageView image;
 	int height;
 	int width;
+	int countForExport;
 
 
 	@Override
@@ -116,6 +117,7 @@ public class CircuitSketchCanvas extends Activity {
 
 	public void openExport()
 	{
+		countForExport++;
 		View v1 = L2.getRootView();
         v1.setDrawingCacheEnabled(true);
         Bitmap bm = v1.getDrawingCache();
@@ -124,7 +126,7 @@ public class CircuitSketchCanvas extends Activity {
 		
 		//storing in sdcard
 		
-		String filename = "circuit2.png";
+		String filename = "circuit"+countForExport+".png";
 		File sd = Environment.getExternalStorageDirectory();
 		File dest = new File(sd, filename);
 
