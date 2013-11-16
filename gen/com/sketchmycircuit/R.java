@@ -23,6 +23,7 @@ public final class R {
         public static final int initialcircuit=0x7f020009;
         public static final int navigation_cancel=0x7f02000a;
         public static final int series=0x7f02000b;
+        public static final int splashscreen=0x7f02000c;
     }
     public static final class id {
         public static final int action_erase=0x7f08000b;
@@ -41,7 +42,8 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_circuit_sketch_canvas=0x7f030000;
-        public static final int tutorial=0x7f030001;
+        public static final int splashscreen=0x7f030001;
+        public static final int tutorial=0x7f030002;
     }
     public static final class menu {
         public static final int activity_circuit_sketch_canvas=0x7f070000;

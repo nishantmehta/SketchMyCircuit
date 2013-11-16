@@ -3,7 +3,9 @@ package com.sketchmycircuit.component;
 import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -167,21 +169,57 @@ public class CustomCircuitSketch extends View implements
 			}
 			else if(bestPrediction.name.contains("export"))
 			{
-				mContext=getContext();
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						context);
+		 
+					// set title
+					alertDialogBuilder.setTitle("Your Title");
+		 
+					// set dialog message
+					alertDialogBuilder
+						.setMessage("Do you want to Export this Circuit Sketch? ")
+						.setCancelable(false)
+						.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								// if this button is clicked, 
+								// call export
+								mContext=getContext();
+								
+								if(mContext instanceof CircuitSketchCanvas)
+								{
+								    CircuitSketchCanvas activity = (CircuitSketchCanvas)mContext;
+								    // Then call the method in the activity.
+								    activity.openExport();
+								    
+								    Toast.makeText(context,
+											"Export Successful",
+											Toast.LENGTH_SHORT).show();
+								    
+								}
+							}
+						  })
+						.setNegativeButton("No",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
+		 
+						// create alert dialog
+						AlertDialog alertDialog = alertDialogBuilder.create();
+		 
+						// show it
+						alertDialog.show();
 				
-				if(mContext instanceof CircuitSketchCanvas)
-				{
-				    CircuitSketchCanvas activity = (CircuitSketchCanvas)mContext;
-				    // Then call the method in the activity.
-				    activity.openExport();
-				    
-				    
-				    
-				}
 				
-				 Toast.makeText(context,
+				
+				
+				
+				
+				/* Toast.makeText(context,
 							bestPrediction.name + " " + bestPrediction.score,
-							Toast.LENGTH_SHORT).show();
+							Toast.LENGTH_SHORT).show();*/
 				
 				return;
 			}
@@ -199,9 +237,9 @@ public class CustomCircuitSketch extends View implements
 								Toast.LENGTH_SHORT).show();
 			}
 
-			Toast.makeText(context,
+		/*	Toast.makeText(context,
 					bestPrediction.name + " " + bestPrediction.score,
-					Toast.LENGTH_SHORT).show();
+					Toast.LENGTH_SHORT).show();*/
 		} 
 		else
 			Toast.makeText(context, bestPrediction.name, Toast.LENGTH_SHORT)

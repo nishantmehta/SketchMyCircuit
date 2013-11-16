@@ -179,6 +179,28 @@ public class SketchView extends View {
 	}
 
 	public int setErase(RectF rt, Path r) {
+	
+	public int collide(RectF rt)
+	{
+		int i;
+		int sizeOfComponentRegion=componentRegion.size();
+		for(i=0;i<sizeOfComponentRegion;i++)
+		{
+			if(RectF.intersects(rt, componentRegion.get(i)))
+			{
+				Toast.makeText(context, "collision detected!", Toast.LENGTH_SHORT).show();
+			 return i;
+			}
+		}
+	
+		Toast.makeText(context, "not collided!", Toast.LENGTH_SHORT).show();
+		return 0;
+		
+		
+	
+	}
+	
+	public void setErase(RectF rt, Path r) {
 		
 		if(erase == true)
 		{
@@ -186,6 +208,9 @@ public class SketchView extends View {
 			return -2;
 		}
 		
+	if(collide(rt)==0){
+			
+			
 		if(rt != null){
 
 		if (rt.contains(tl.x, tl.y) || rt.contains(tr.x, tr.y) || rt.contains(bl.x, bl.y) || rt.contains(br.x, br.y))
@@ -274,7 +299,19 @@ public class SketchView extends View {
 		erase = true;
 		return 1;
 		}
-		return -1;
+		}//collision check ends
+	
+	else{
+		  componentRegion.remove(collide(rt));
+		  componentPath.remove(collide(rt));
+		  eraseRegion.remove(collide(rt));
+		  erasePath.remove(collide(rt));
+		  Toast.makeText(context, "collided", Toast.LENGTH_SHORT).show();
+		  
+		  
+		
+		
+		}
 	}
 	
 	public void componentPoints(RectF compRect, Path compPath, String comp)
@@ -335,6 +372,8 @@ public class SketchView extends View {
 			end.x = wireComponentEnd.x;
 			end.y = wireComponentEnd.y;			
 		}
+		
+		componentRegion.add(compRect);
 		
 		String direction;
 		eraseStart=start;
