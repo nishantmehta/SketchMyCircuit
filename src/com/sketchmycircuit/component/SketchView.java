@@ -27,11 +27,19 @@ public class SketchView extends View {
 	public PointF tr = new PointF();
 	public PointF bl = new PointF();
 	public PointF br = new PointF();
+	public PointF wire1;
+	public PointF wireComponentStart = new PointF();
+	public PointF wireComponentEnd = new PointF();
+	int wirecount = 0;
+	ArrayList<PointF> wires = new ArrayList<PointF>();
 	public Boolean diodeInvert = false;
 	CircuitSketchCanvas CSC=new CircuitSketchCanvas();
-	
-	
+	public PointF eraseStart=  new PointF();
+	public PointF eraseEnd=  new PointF();
 	public LayoutParams params;
+	
+	int componentXOffset=220;
+	int componentYOffset=220;
 	String TAG = "sketch";
 
 	Boolean mode = false;
@@ -91,6 +99,82 @@ public class SketchView extends View {
 		// to make the initial circuit
 		refreshCanvas(width, height);
 
+	}
+	
+	public void drawWire(RectF rt, Path r)
+	{
+		if(rt != null)
+		{
+			PointF ctl = new PointF();
+			PointF ctr = new PointF();
+			PointF cbl = new PointF();
+			PointF cbr = new PointF();
+			PointF start = new PointF();
+			PointF end = new PointF();
+			Boolean wire = false;
+			
+			ctl.x = rt.left;
+			ctl.y = rt.top;
+			ctr.x = rt.right;
+			ctr.y = ctl.y;
+			cbl.x = ctl.x;
+			cbl.y = rt.bottom;
+			cbr.x = ctr.x;
+			cbr.y = cbl.y;
+			
+			if(tl.y <= cbl.y && tl.y >= ctl.y)
+			{
+				start.y = tl.y;
+				end.y = bl.y;
+				start.x = ctl.x;
+				end.x = ctl.x;
+				wire = true;
+			}
+			if(tl.y <= cbl.y && tl.y <= ctl.y && bl.y >= ctl.y && bl.y <= cbl.y)
+			{
+				end.x = cbr.x;
+				end.y = br.y;
+				start.x = end.x;
+				start.y = tl.y;
+				wire = true;
+			}
+			if(ctl.x <= tl.x && cbl.x <= tl.x)
+			{
+				start.x = tl.x;
+				start.y = ctl.y;
+				end.x = tr.x;
+				end.y = start.y;
+				wire = true;
+			}
+			if(tl.x <= ctl.x && tl.x <= ctr.x && tr.x >= ctl.x && tr.x <= ctr.x)
+			{
+				end.x = tr.x;
+				end.y = cbr.y;
+				start.x = tl.x;
+				start.y = cbr.y;
+				wire = true;
+			}
+			
+			if(wire == true)
+			{
+				initialCircuit.moveTo(start.x, start.y);
+				initialCircuit.lineTo(end.x, end.y);
+				wire1 = new PointF();
+				wire1.x = start.x;
+				wire1.y = start.y;
+				wires.add(wire1);
+				wirecount = wirecount + 1;
+				
+				/*Toast.makeText(context, "WIRE SUCCESS", Toast.LENGTH_SHORT).show();
+				for( int i =0; i<wires.size();i++)
+				{
+					String a=String.valueOf(wires.get(i).x);
+					Toast.makeText(context, a, Toast.LENGTH_SHORT).show();
+					String b=String.valueOf(wires.get(i).y);
+					Toast.makeText(context, b, Toast.LENGTH_SHORT).show();
+				}*/
+			}
+		}
 	}
 
 	
@@ -170,16 +254,34 @@ public class SketchView extends View {
 			end.x = tl.x;
 			start.y = ctl.y;
 			end.y = cbl.y;
-		}	
+		}
 		double x = start.x  - end.x;
 		double y = start.y - end.y;
 		double dist = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0));
+		
+		if(tl.y < ctl.y && bl.y > cbl.y && tl.x < ctl.x && tr.x > ctr.x)
+		{
+			dist = ctr.x - ctl.x;
+			for(int i = 0; i < wires.size(); i++)
+			{
+				if(ctl.y < wires.get(i).y && cbl.y > wires.get(i).y)
+				{
+					wireComponentStart.x = ctl.x;
+					wireComponentStart.y = wires.get(i).y;
+					wireComponentEnd.x = ctr.x;
+					wireComponentEnd.y = wires.get(i).y;
+					break;
+				}
+			}
+		}
+		
 		
 		if(dist < 200)
 		{
 			Toast.makeText(context, "Please erase a bigger area!", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		
 		
 		erasePath.add(r);
 		eraseRegion.add(rt);
@@ -252,12 +354,20 @@ public class SketchView extends View {
 			start.y = ctl.y;
 			end.y = cbl.y;
 			diodeInvert = true;
-		}	
+		}
+		if(tl.y < ctl.y && bl.y > cbl.y && tl.x < ctl.x && tr.x > ctr.x)
+		{
+			start.x = wireComponentStart.x;
+			start.y = wireComponentStart.y;
+			end.x = wireComponentEnd.x;
+			end.y = wireComponentEnd.y;			
+		}
 		
 		componentRegion.add(compRect);
 		
 		String direction;
-		
+		eraseStart=start;
+		eraseEnd=end;
 		if(start.x != end.x)
 			direction = "h";
 		else
@@ -276,6 +386,25 @@ public class SketchView extends View {
 	
 	public void drawComponent(PointF start, PointF end, int comp, String direction)
 	{
+		
+		
+		//nishant erase path
+		RectF eraseR= new RectF();
+		if (direction == "h")
+		{
+			end.x=start.x+componentXOffset;
+			
+			eraseR.set(start.x, start.y+3, end.x, start.y-3);
+		}
+		else if (direction == "v")
+		{
+			end.y=start.y+componentXOffset;
+			eraseR.set(start.x-3, start.y, start.x+3, end.y);
+		}
+		
+		eraseRegion.set(eraseRegion.size()-1,eraseR);
+		//
+		
 		float x = start.x;
 		float y = start.y;
 		Path path = new Path();
@@ -424,6 +553,8 @@ public class SketchView extends View {
 		}
 		
 		componentPath.add(path);
+		
+		
 		postInvalidate();
 	}
 	
@@ -549,6 +680,10 @@ public class SketchView extends View {
 		initialCircuit.lineTo((w - 260) / 2, h - 400);
 		initialCircuit.lineTo(100, h - 400);
 		initialCircuit.lineTo(100, 100);
+		wires.clear();
+		wirecount = 0;
+		wireComponentStart = new PointF();
+		wireComponentEnd = new PointF();
 		postInvalidate();
 		return true;
 
