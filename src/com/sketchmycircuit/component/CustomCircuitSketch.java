@@ -25,7 +25,7 @@ import com.sketchmycircuit.ui.CircuitSketchCanvas;
 public class CustomCircuitSketch extends View implements
 		OnGesturePerformedListener, OnGestureListener {
 
-	private GestureLibrary gestureLib;
+	private GestureLibrary gestureLib1Stroke ,gestureLib4Stroke;
 	Context context;
 	public LayoutParams params;
 	public GestureOverlayView gestureOverlayView;
@@ -38,6 +38,13 @@ public class CustomCircuitSketch extends View implements
 	
 	CircuitSketchCanvas CSC;
 
+	
+	/*
+	 * 1 stroke = erase + circuit line+resistor+inductor+export
+	 * 2 stroke= 
+	 * 3 stroke=diode
+	 * 4 stroke = capacitor.
+	 */
 	public CustomCircuitSketch(Context context, int width, int height) {
 		super(context);
 		this.context = context;
@@ -52,8 +59,12 @@ public class CustomCircuitSketch extends View implements
 		sv = new SketchView(context, height, width);
 
 		gestureOverlayView.addView(sv);
-		gestureLib = GestureLibraries.fromRawResource(context, R.raw.gestures);
-		if (!gestureLib.load()) {
+		gestureLib1Stroke = GestureLibraries.fromRawResource(context, R.raw.gestures);
+		if (!gestureLib1Stroke.load()) {
+
+		}
+		gestureLib4Stroke = GestureLibraries.fromRawResource(context, R.raw.gestures_4_stroke);
+		if (!gestureLib4Stroke.load()) {
 
 		}
 	}
@@ -72,15 +83,25 @@ public class CustomCircuitSketch extends View implements
 	public void onGesturePerformed(GestureOverlayView arg0, Gesture gesture) 
 	{
 		// TODO Auto-generated method stub
-
-		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+				int NumberOfStrokes=gesture.getStrokesCount();
+				ArrayList<Prediction> predictions =null;
+				if(NumberOfStrokes==1||NumberOfStrokes==3)
+				{
+					predictions = gestureLib1Stroke.recognize(gesture);
+					
+				}
+				
+				if(NumberOfStrokes==4)
+				{
+					predictions = gestureLib4Stroke.recognize(gesture);
+				}
 
 		Prediction bestPrediction = findBestPrediction(predictions);
 		if (bestPrediction.score > 0) 
 		{
 			String component = null;
 			// if the gesture is a delete gesture
-			if (bestPrediction.name.contains("delete")) 
+			if (bestPrediction.name.contains("erase")) 
 			{
 				ArrayList<GestureStroke> strokes = gesture.getStrokes();
 				GestureStroke st = strokes.get(0);
@@ -108,6 +129,18 @@ public class CustomCircuitSketch extends View implements
 			{
 				component = "inductor";
 			}
+			else if (bestPrediction.name.contains("wire"))
+			{
+				ArrayList<GestureStroke> wirestrokes = gesture.getStrokes();
+				GestureStroke st = wirestrokes.get(0);
+
+				RectF rec = st.boundingBox;
+				Path pt = st.getPath();
+				compRect = rec;
+				compPt = pt;
+				
+				sv.drawWire(rec, pt);
+			}
 			else if(bestPrediction.name.contains("export"))
 			{
 				mContext=getContext();
@@ -129,7 +162,8 @@ public class CustomCircuitSketch extends View implements
 				return;
 			}
 			
-			sv.componentPoints(compRect, compPt, component);
+			if (!bestPrediction.name.contains("wire"))
+				sv.componentPoints(compRect, compPt, component);
 
 			Toast.makeText(context,
 					bestPrediction.name + " " + bestPrediction.score,
