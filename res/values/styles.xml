@@ -10,11 +10,17 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    
+    <style name="WindowTitleBackground">     
+        <item name="android:background">@color/menu_background</item>
     </style>
 
 </resources>

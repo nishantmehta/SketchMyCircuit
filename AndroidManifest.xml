@@ -25,6 +25,66 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialone"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialone.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialtwo"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialtwo.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialthree"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialthree.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialfour"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialfour.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialfive"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialfive.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sketchmycircuit.ui.tutorialsix"
+            android:label="@string/app_name" 
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="com.sketchmycircuit.ui.tutorialsix.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
          <activity
             android:name="com.sketchmycircuit.ui.SplashScreen"
             android:label="@string/app_name" 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-   android:background="@drawable/initialcircuit">
+    android:layout_height="fill_parent" 
+    android:background="@drawable/circuiterase">
 
     <Button
         android:id="@+id/button1"
@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginRight="48dp"
+        android:layout_marginRight="36dp"
         android:text="NEXT" />
 
 </RelativeLayout>

@@ -15,6 +15,7 @@ public class SplashScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splashscreen);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		int GlobalStart=0;
 		Thread logoTimer = new Thread(){
 		
 			            @Override
@@ -25,9 +26,9 @@ public class SplashScreen extends Activity {
 		
 			                try {
 			
-			                    sleep(5000);
+			                    sleep(2000);
 		
-			                    Intent i = new Intent(SplashScreen.this,CircuitSketchCanvas.class);
+			                    Intent i = new Intent(SplashScreen.this,tutorialone.class);
 			
 			                    startActivity(i);
 			
