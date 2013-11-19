@@ -5,16 +5,17 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
-    
+
     <!-- erase button -->
-    <item android:id="@+id/action_erase"
-          android:icon="@drawable/navigation_cancel"
-          android:title="@string/menu_erase"
-          android:showAsAction="ifRoom" />
-    
-     <item android:id="@+id/action_screenshot"
-          android:icon="@drawable/export"
-          android:title="@string/menu_export"
-          android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_erase"
+        android:icon="@drawable/navigation_cancel"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_erase"/>
+    <item
+        android:id="@+id/action_screenshot"
+        android:icon="@drawable/export"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_export"/>
 
 </menu>

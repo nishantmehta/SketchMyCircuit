@@ -3,7 +3,7 @@
 
     <string name="app_name">SketchMyCircuit</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Tutorial</string>
     <string name="menu_erase">Erase</string>
     <string name="menu_export">Export</string>
     <color name="menu_background">#007ACC</color>
