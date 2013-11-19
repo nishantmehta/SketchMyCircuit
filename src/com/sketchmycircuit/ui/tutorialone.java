@@ -27,6 +27,8 @@ public class tutorialone extends Activity {
             public void onClick(View v) {
             	Intent i=new Intent(tutorialone.this,tutorialtwo.class);
             	startActivity(i);
+            	overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+           
             	finish();
                 // Perform action on click
             }
