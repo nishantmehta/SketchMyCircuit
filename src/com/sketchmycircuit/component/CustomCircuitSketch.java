@@ -244,7 +244,7 @@ public class CustomCircuitSketch extends View implements
 				else if(check == 0)
 				{
 					Toast.makeText(context,
-							"Please erase a part of the circuit before drawing components!" + " " + bestPrediction.score,
+							"Please erase a part of the circuit before drawing components!",
 							Toast.LENGTH_SHORT).show();
 				}
 			}

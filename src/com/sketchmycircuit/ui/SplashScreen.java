@@ -1,11 +1,12 @@
 package com.sketchmycircuit.ui;
 
-import com.sketchmycircuit.R;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
+import com.sketchmycircuit.R;
 
 public class SplashScreen extends Activity {
 
@@ -16,6 +17,8 @@ public class SplashScreen extends Activity {
 		setContentView(R.layout.splashscreen);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		int GlobalStart=0;
+		
+		
 		Thread logoTimer = new Thread(){
 		
 			            @Override
@@ -26,11 +29,21 @@ public class SplashScreen extends Activity {
 		
 			                try {
 			
-			                    sleep(2000);
-		
-			                    Intent i = new Intent(SplashScreen.this,tutorialone.class);
-			
-			                    startActivity(i);
+			                    sleep(1000);
+			                    SharedPreferences settings = getSharedPreferences("setting", MODE_PRIVATE);
+			                    if(settings.contains("done"))
+			            		{
+			                    	Intent i = new Intent(SplashScreen.this,CircuitSketchCanvas.class);
+			            			
+				                    startActivity(i);
+			            		}
+			                    else
+			                    {
+			                    	Intent i = new Intent(SplashScreen.this,tutorialone.class);
+			            			
+				                    startActivity(i);
+			                    }
+			                    
 			
 			                } catch (InterruptedException e) {
 			
